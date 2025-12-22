@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ADDASTRA | Юридическая защита образовательных учреждений Казахстана</title>
+    <meta name="description" content="Юридический партнер для школ и детских садов. Защита от штрафов и проверок. Абонентское обслуживание.">
+
+    <link rel="icon" type="image/svg+xml" href="favicon_addastra.svg">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Montserrat:wght@600;700;800&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            red: '#E31E24',
+                            darkRed: '#B91218',
+                            teal: '#2C5F5F',
+                            dark: '#2D2D2D',
+                            light: '#F8F9FA'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Open Sans', 'Inter', 'sans-serif'],
+                        heading: ['Montserrat', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Custom Styles */
+        body { font-family: 'Open Sans', sans-serif; overflow-x: hidden; }
+        h1, h2, h3, h4 { font-family: 'Montserrat', sans-serif; }
+        
+        .glass-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.07);
+        }
+        
+        .hero-bg {
+            background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+        }
+
+        .btn-pulse {
+            animation: pulse-red 2s infinite;
+        }
+
+        @keyframes pulse-red {
+            0% { box-shadow: 0 0 0 0 rgba(227, 30, 36, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(227, 30, 36, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(227, 30, 36, 0); }
+        }
+
+        .check-list li {
+            position: relative;
+            padding-left: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+        .check-list li::before {
+            content: '✓';
+            color: #E31E24;
+            position: absolute;
+            left: 0;
+            font-weight: bold;
+        }
+
+        /* Mobile Sticky Button */
+        .mobile-sticky {
+            display: none;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            z-index: 50;
+            padding: 10px;
+            background: white;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+        }
+        @media (max-width: 768px) {
+            .mobile-sticky { display: block; }
+            body { padding-bottom: 60px; }
+        }
+
+        /* Modal */
+        .modal {
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease-in-out;
+        }
+        .modal.active {
+            opacity: 1;
+            visibility: visible;
+        }
+    </style>
+</head>
+<body class="text-brand-dark bg-white">
+
+    <header class="fixed w-full top-0 z-40 bg-white/90 backdrop-blur-md shadow-sm transition-all duration-300">
+        <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+            <div class="flex items-center gap-2">
+                <div class="text-2xl font-black font-heading tracking-tighter">
+                    ADD<span class="text-brand-red">ASTRA</span>
+                </div>
+            </div>
+            <div class="hidden md:flex items-center gap-6">
+                <a href="tel:+77071421215" class="font-bold text-lg hover:text-brand-red transition">+7 707 142 1215</a>
+                <a href="#contact" class="bg-brand-teal text-white px-6 py-2 rounded-full font-bold hover:bg-opacity-90 transition">Консультация</a>
+            </div>
+            <a href="tel:+77071421215" class="md:hidden text-brand-red text-xl"><i class="fas fa-phone"></i></a>
+        </div>
+    </header>
+
+    <section class="hero-bg min-h-screen flex items-center py-24 relative overflow-hidden" style="margin-top: 80px;">
+        <div class="container mx-auto px-4 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            <div>
+                <p class="text-brand-red font-bold uppercase tracking-wider mb-2 text-sm md:text-base">
+                    Юридический партнер №1 для образовательных учреждений
+                </p>
+                <h1 class="text-4xl md:text-5xl lg:text-[3.5rem] font-heading font-bold leading-tight mb-6">
+                    Защитите свою школу от штрафов до <span class="text-brand-red">5 млн тенге</span> и внезапных проверок
+                </h1>
+                <p class="text-gray-600 text-lg md:text-xl mb-8 leading-relaxed">
+                    Личный юрист по подписке от 250,000 ₸/мес — дешевле, чем один штраф. Ответ на любой вопрос за 15 минут.
+                </p>
+                
+                <div class="bg-red-50 border-l-4 border-brand-red p-4 mb-8 rounded-r-lg inline-block">
+                    <p class="font-bold text-brand-red flex items-center gap-2">
+                        <i class="fas fa-bolt"></i> ТОЛЬКО В ДЕКАБРЕ:
+                    </p>
+                    <p class="text-sm">Бесплатный юридический аудит на 200,000 ₸ при заключении договора</p>
+                </div>
+
+                <div class="flex flex-col sm:flex-row gap-4 mb-10">
+                    <div class="flex-1">
+                        <a href="#contact" class="btn-pulse inline-flex items-center justify-center gap-2 bg-brand-red text-white text-base font-bold py-4 px-8 rounded-xl hover:bg-brand-darkRed transition-all duration-300 w-full shadow-xl shadow-red-500/30 hover:shadow-2xl hover:shadow-red-500/40 hover:-translate-y-0.5">
+                            <i class="fas fa-calendar-check"></i>
+                            Получить бесплатную консультацию
+                        </a>
+                        <p class="text-xs mt-3 px-2 py-1.5 bg-yellow-100 border-l-4 border-yellow-400 text-yellow-800 font-semibold inline-block rounded">
+                            <i class="fas fa-bolt text-yellow-600"></i> Аудит рисков за 24 часа
+                        </p>
+                    </div>
+                    <a href="#tariffs" class="inline-flex items-center justify-center gap-2 bg-white border-2 border-brand-teal text-brand-teal font-bold py-4 px-8 rounded-xl hover:bg-brand-teal hover:text-white transition-all duration-300 shadow-lg hover:shadow-xl hover:-translate-y-0.5">
+                        <i class="fas fa-calculator"></i>
+                        Рассчитать стоимость
+                    </a>
+                </div>
+
+                <div class="flex flex-wrap gap-4 text-sm font-semibold">
+                    <span class="flex items-center gap-2.5 bg-teal-50 px-4 py-2.5 rounded-full border-2 border-brand-teal/30">
+                        <span class="flex items-center justify-center w-6 h-6 bg-brand-teal text-white rounded-full text-xs">
+                            <i class="fas fa-building"></i>
+                        </span>
+                        <span class="text-brand-dark">20+ учреждений</span>
+                    </span>
+                    <span class="flex items-center gap-2.5 bg-green-50 px-4 py-2.5 rounded-full border-2 border-green-500/30">
+                        <span class="flex items-center justify-center w-6 h-6 bg-green-500 text-white rounded-full text-xs">
+                            <i class="fas fa-shield-alt"></i>
+                        </span>
+                        <span class="text-brand-dark">0 штрафов в 2025</span>
+                    </span>
+                    <span class="flex items-center gap-2.5 bg-blue-50 px-4 py-2.5 rounded-full border-2 border-blue-500/30">
+                        <span class="flex items-center justify-center w-6 h-6 bg-blue-500 text-white rounded-full text-xs">
+                            <i class="fas fa-clock"></i>
+                        </span>
+                        <span class="text-brand-dark">Ответ за 15 минут</span>
+                    </span>
+                </div>
+            </div>
+
+            <div class="relative">
+                <div class="relative rounded-2xl overflow-hidden shadow-2xl bg-white">
+                    <img src="team.jpg"
+                         alt="Управляющий партнер ADDASTRA"
+                         class="w-full h-auto object-contain mix-blend-darken">
+                </div>
+                <div class="absolute -z-10 top-10 -right-10 w-full h-full bg-brand-red/10 rounded-2xl"></div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-20 bg-brand-light">
+        <div class="container mx-auto px-4">
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <h2 class="text-3xl md:text-4xl font-heading font-bold mb-4">Один штраф может стоить вам <span class="text-brand-red">годовой прибыли</span></h2>
+                <p class="text-lg text-gray-600">Реальные ситуации, с которыми директора сталкиваются каждый месяц:</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
+                <div class="bg-white p-6 rounded-xl shadow-md hover:shadow-xl transition border-t-4 border-brand-red group">
+                    <div class="text-brand-red text-3xl mb-4"><i class="fas fa-fire-extinguisher"></i></div>
+                    <h3 class="font-bold text-lg mb-2">Нет актов на огнетушители</h3>
+                    <p class="text-2xl font-black text-brand-dark mb-3">ШТРАФ: 5 000 000 ₸</p>
+                    <p class="text-sm text-gray-600 mb-4">Пожарная инспекция приходит без предупреждения. Просрочка даже на день грозит закрытием.</p>
+                    <p class="text-xs font-bold text-brand-red">→ Закрытие школы на 30 дней</p>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-md hover:shadow-xl transition border-t-4 border-brand-red group">
+                    <div class="text-brand-red text-3xl mb-4"><i class="fas fa-file-contract"></i></div>
+                    <h3 class="font-bold text-lg mb-2">Проблемы с лицензией</h3>
+                    <p class="text-2xl font-black text-brand-dark mb-3">ОТЗЫВ ЛИЦЕНЗИИ</p>
+                    <p class="text-sm text-gray-600 mb-4">Несоответствие устава и программ. Педагоги на ГПХ вместо трудовых договоров.</p>
+                    <p class="text-xs font-bold text-brand-red">→ Остановка работы + возврат оплат</p>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-md hover:shadow-xl transition border-t-4 border-brand-red group">
+                    <div class="text-brand-red text-3xl mb-4"><i class="fas fa-user-injured"></i></div>
+                    <h3 class="font-bold text-lg mb-2">Иск от сотрудника</h3>
+                    <p class="text-2xl font-black text-brand-dark mb-3">УБЫТОК: 2 500 000 ₸</p>
+                    <p class="text-sm text-gray-600 mb-4">Незаконное увольнение. Суд восстанавливает сотрудника и обязывает выплатить компенсацию.</p>
+                    <p class="text-xs font-bold text-brand-red">→ Репутационный скандал</p>
+                </div>
+                 <div class="bg-white p-6 rounded-xl shadow-md hover:shadow-xl transition border-t-4 border-brand-red group">
+                    <div class="text-brand-red text-3xl mb-4"><i class="fas fa-users-slash"></i></div>
+                    <h3 class="font-bold text-lg mb-2">Жалоба родителей в ГАСК</h3>
+                    <p class="text-2xl font-black text-brand-dark mb-3">ШТРАФ: 1 500 000 ₸</p>
+                    <p class="text-sm text-gray-600 mb-4">Один конфликт в чате приводит к комплексной внеплановой проверке всего учреждения.</p>
+                    <p class="text-xs font-bold text-brand-red">→ Потеря репутации</p>
+                </div>
+                 <div class="bg-white p-6 rounded-xl shadow-md hover:shadow-xl transition border-t-4 border-brand-red group">
+                    <div class="text-brand-red text-3xl mb-4"><i class="fas fa-utensils"></i></div>
+                    <h3 class="font-bold text-lg mb-2">Нарушения СЭС</h3>
+                    <p class="text-2xl font-black text-brand-dark mb-3">ШТРАФ: 1 000 000 ₸</p>
+                    <p class="text-sm text-gray-600 mb-4">Нарушения в меню, журнале бракеража или на пищеблоке.</p>
+                    <p class="text-xs font-bold text-brand-red">→ Закрытие столовой</p>
+                </div>
+                 <div class="bg-white p-6 rounded-xl shadow-md hover:shadow-xl transition border-t-4 border-brand-red group">
+                    <div class="text-brand-red text-3xl mb-4"><i class="fas fa-building"></i></div>
+                    <h3 class="font-bold text-lg mb-2">Выселение из здания</h3>
+                    <p class="text-2xl font-black text-brand-dark mb-3">УБЫТОК: 10 000 000 ₸</p>
+                    <p class="text-sm text-gray-600 mb-4">Ошибки в договоре аренды. Арендодатель расторгает договор за 30 дней.</p>
+                    <p class="text-xs font-bold text-brand-red">→ Потеря бизнеса</p>
+                </div>
+            </div>
+
+            <div class="rounded-2xl overflow-hidden shadow-2xl flex flex-col md:flex-row">
+                <div class="md:w-1/2 bg-red-50 p-8 md:p-12">
+                    <h3 class="text-2xl font-bold mb-6 flex items-center gap-3"><i class="fas fa-times-circle text-red-500"></i> БЕЗ ЮРИСТА</h3>
+                    <ul class="space-y-4">
+                        <li class="flex gap-3"><span class="text-red-500">•</span> Одна проверка = штрафы до 5 млн ₸</li>
+                        <li class="flex gap-3"><span class="text-red-500">•</span> Постоянный стресс и бессонница</li>
+                        <li class="flex gap-3"><span class="text-red-500">•</span> Экстренный поиск юриста = дорого</li>
+                        <li class="flex gap-3"><span class="text-red-500">•</span> Риск потери лицензии</li>
+                    </ul>
+                </div>
+                <div class="md:w-1/2 bg-teal-50 p-8 md:p-12 relative overflow-hidden">
+                    <div class="absolute top-0 right-0 w-24 h-24 bg-brand-teal/10 rounded-bl-full"></div>
+                    <h3 class="text-2xl font-bold mb-6 flex items-center gap-3 text-brand-teal"><i class="fas fa-check-circle"></i> С ADDASTRA</h3>
+                    <ul class="space-y-4">
+                        <li class="flex gap-3"><span class="text-brand-teal">✓</span> Полная защита от 250,000 ₸/мес</li>
+                        <li class="flex gap-3"><span class="text-brand-teal">✓</span> Ответы в WhatsApp за 15 минут</li>
+                        <li class="flex gap-3"><span class="text-brand-teal">✓</span> 0 штрафов — превентивная защита</li>
+                        <li class="flex gap-3"><span class="text-brand-teal">✓</span> Спокойный сон директора</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="text-center mt-10">
+                <a href="#contact" class="btn-pulse inline-block bg-brand-red text-white font-bold py-4 px-10 rounded-full text-lg hover:bg-brand-darkRed transition shadow-xl">
+                    Защитить мою школу от штрафов
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <section id="tariffs" class="py-20 bg-white">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-heading font-bold mb-4">Тарифы на защиту</h2>
+                <p class="text-brand-teal font-medium">🎁 Бесплатный аудит на 200,000 ₸ включен во все тарифы в декабре</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 items-start">
+                <div class="border rounded-2xl p-8 hover:shadow-xl transition relative bg-white">
+                    <h3 class="text-xl font-bold mb-2">ДЕТСКИЙ САД</h3>
+                    <p class="text-3xl font-bold text-brand-dark mb-6">от 150 000 ₸<span class="text-sm font-normal text-gray-500">/мес</span></p>
+                    <ul class="check-list text-sm text-gray-600 mb-8 space-y-3">
+                        <li>Договоры и локальные акты</li>
+                        <li>Кадровые вопросы</li>
+                        <li>Подготовка к СЭС и ДЧС</li>
+                        <li>Работа с жалобами родителей</li>
+                        <li>Консультации 24/7</li>
+                    </ul>
+                    <a href="#contact" class="block w-full text-center border-2 border-brand-red text-brand-red font-bold py-3 rounded-lg hover:bg-brand-red hover:text-white transition">Рассчитать</a>
+                </div>
+
+                <div class="border-2 border-brand-red rounded-2xl p-8 shadow-2xl relative bg-white transform md:-translate-y-4">
+                    <div class="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-brand-red text-white px-4 py-1 rounded-full text-sm font-bold">РЕКОМЕНДУЕМ</div>
+                    <h3 class="text-xl font-bold mb-2">ШКОЛА</h3>
+                    <p class="text-3xl font-bold text-brand-dark mb-6">от 250 000 ₸<span class="text-sm font-normal text-gray-500">/мес</span></p>
+                    <ul class="check-list text-sm text-gray-600 mb-8 space-y-3">
+                        <li><b>Всё из тарифа "Детский сад"</b></li>
+                        <li>Защита при проверках госорганов</li>
+                        <li>Подготовка к лицензированию</li>
+                        <li>Разработка всех документов</li>
+                        <li>Судебные дела (по заявке)</li>
+                        <li>Приоритет 15 минут</li>
+                    </ul>
+                    <a href="#contact" class="block w-full text-center bg-brand-red text-white font-bold py-3 rounded-lg hover:bg-brand-darkRed transition shadow-lg">Рассчитать</a>
+                </div>
+
+                <div class="border rounded-2xl p-8 hover:shadow-xl transition relative bg-white">
+                    <h3 class="text-xl font-bold mb-2">ОБРАЗОВАТЕЛЬНЫЙ ЦЕНТР</h3>
+                    <p class="text-3xl font-bold text-brand-dark mb-6">от 150 000 ₸<span class="text-sm font-normal text-gray-500">/мес</span></p>
+                    <ul class="check-list text-sm text-gray-600 mb-8 space-y-3">
+                        <li>Договоры с учениками</li>
+                        <li>Кадровые документы</li>
+                        <li>Подготовка к лицензированию</li>
+                        <li>Юридические консультации</li>
+                        <li>Сопровождение мероприятий</li>
+                    </ul>
+                    <a href="#contact" class="block w-full text-center border-2 border-brand-red text-brand-red font-bold py-3 rounded-lg hover:bg-brand-red hover:text-white transition">Рассчитать</a>
+                </div>
+            </div>
+            
+            <div class="bg-gray-100 rounded-xl p-6 mt-12 text-center max-w-2xl mx-auto flex flex-col md:flex-row items-center gap-4 justify-center">
+                <i class="fas fa-question-circle text-2xl text-gray-400"></i>
+                <p class="text-sm md:text-base">Не уверены, какой тариф подойдет? <a href="#contact" class="text-brand-red font-bold underline">Получите бесплатный аудит и расчет</a></p>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-20 bg-brand-light">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl md:text-4xl font-heading font-bold text-center mb-16">4 шага к безопасности</h2>
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 relative">
+                <div class="hidden md:block absolute top-12 left-0 w-full h-1 bg-gray-200 -z-0"></div>
+                
+                <div class="text-center relative z-10">
+                    <div class="w-24 h-24 bg-white border-4 border-brand-teal rounded-full flex items-center justify-center mx-auto mb-6 text-3xl text-brand-teal shadow-lg">
+                        <i class="fas fa-mobile-alt"></i>
+                    </div>
+                    <h3 class="font-bold text-xl mb-2">1. Запрос</h3>
+                    <p class="text-sm text-gray-600">Пишете нам в WhatsApp или звоните</p>
+                </div>
+                <div class="text-center relative z-10">
+                    <div class="w-24 h-24 bg-white border-4 border-brand-teal rounded-full flex items-center justify-center mx-auto mb-6 text-3xl text-brand-teal shadow-lg">
+                        <i class="fas fa-bolt"></i>
+                    </div>
+                    <h3 class="font-bold text-xl mb-2">2. Оценка</h3>
+                    <p class="text-sm text-gray-600">Анализируем ситуацию за 15 минут</p>
+                </div>
+                <div class="text-center relative z-10">
+                    <div class="w-24 h-24 bg-white border-4 border-brand-teal rounded-full flex items-center justify-center mx-auto mb-6 text-3xl text-brand-teal shadow-lg">
+                        <i class="fas fa-gavel"></i>
+                    </div>
+                    <h3 class="font-bold text-xl mb-2">3. Решение</h3>
+                    <p class="text-sm text-gray-600">Работаем автономно, не отвлекая вас</p>
+                </div>
+                <div class="text-center relative z-10">
+                    <div class="w-24 h-24 bg-brand-teal text-white rounded-full flex items-center justify-center mx-auto mb-6 text-3xl shadow-lg">
+                        <i class="fas fa-check"></i>
+                    </div>
+                    <h3 class="font-bold text-xl mb-2">4. Результат</h3>
+                    <p class="text-sm text-gray-600">Штрафов нет, документы чисты</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-20 bg-brand-dark text-white">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl md:text-4xl font-heading font-bold text-center mb-16">Нам доверяют образование Казахстана</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center mb-16 divide-y md:divide-y-0 md:divide-x divide-gray-700">
+                <div>
+                    <div class="text-5xl font-black text-brand-red mb-2 counter" data-target="20">0</div>
+                    <p class="text-lg opacity-80">Учреждений под защитой</p>
+                </div>
+                <div class="pt-8 md:pt-0">
+                    <div class="text-5xl font-black text-brand-red mb-2 counter" data-target="7">0</div>
+                    <p class="text-lg opacity-80">Специализаций в праве</p>
+                </div>
+                <div class="pt-8 md:pt-0">
+                    <div class="text-5xl font-black text-brand-red mb-2">15<span class="text-2xl">мин</span></div>
+                    <p class="text-lg opacity-80">Время реакции на запрос</p>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="bg-white/10 p-6 rounded-xl backdrop-blur-sm border border-white/10">
+                    <div class="text-brand-red mb-4"><i class="fas fa-shield-alt text-2xl"></i></div>
+                    <h4 class="font-bold text-lg mb-2">Сэкономили 2,5 млн ₸</h4>
+                    <p class="text-sm text-gray-300">Нашли ошибки в предписании пожарной инспекции и отменили штраф для частной школы в Алматы.</p>
+                </div>
+                <div class="bg-white/10 p-6 rounded-xl backdrop-blur-sm border border-white/10">
+                    <div class="text-brand-red mb-4"><i class="fas fa-clipboard-check text-2xl"></i></div>
+                    <h4 class="font-bold text-lg mb-2">Проверка СЭС за 3 дня</h4>
+                    <p class="text-sm text-gray-300">Подготовили детский сад к внеплановой проверке, исправив 12 критических нарушений в документах.</p>
+                </div>
+                <div class="bg-white/10 p-6 rounded-xl backdrop-blur-sm border border-white/10">
+                    <div class="text-brand-red mb-4"><i class="fas fa-handshake text-2xl"></i></div>
+                    <h4 class="font-bold text-lg mb-2">Конфликт без суда</h4>
+                    <p class="text-sm text-gray-300">Урегулировали претензию родителей о возврате средств через медиацию, избежав жалобы в ГАСК.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-20 bg-white">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl md:text-4xl font-heading font-bold text-center mb-4">Команда экспертов</h2>
+            <p class="text-center text-gray-600 mb-12 max-w-2xl mx-auto">Вашей защитой занимаются специалисты с общим опытом более 40 лет в образовательном праве</p>
+            
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="group">
+                    <div class="bg-gray-200 rounded-xl overflow-hidden h-80 mb-4 relative">
+                        <img src="images/askhat.jpg" alt="Асхат Курмангали" class="w-full h-full object-cover object-top grayscale group-hover:grayscale-0 transition">
+                    </div>
+                    <h3 class="font-bold text-lg">Асхат Курмангали</h3>
+                    <p class="text-sm text-brand-red font-semibold mb-2">Управляющий партнер</p>
+                    <p class="text-xs text-gray-500">20+ лет опыта. Образовательное и корпоративное право.</p>
+                </div>
+                <div class="group">
+                    <div class="bg-gray-200 rounded-xl overflow-hidden h-80 mb-4 relative">
+                        <img src="images/abylay.jpg" alt="Абылай Байтенов" class="w-full h-full object-cover object-top grayscale group-hover:grayscale-0 transition">
+                    </div>
+                    <h3 class="font-bold text-lg">Абылай Байтенов</h3>
+                    <p class="text-sm text-brand-red font-semibold mb-2">Управляющий партнер</p>
+                    <p class="text-xs text-gray-500">Экс-судья. Гражданские и трудовые споры.</p>
+                </div>
+                 <div class="group">
+                    <div class="bg-gray-200 rounded-xl overflow-hidden h-64 mb-4 relative">
+                         <img src="https://ui-avatars.com/api/?name=Dinara+M&background=E31E24&color=fff&size=256" alt="Динара Мажитова" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition">
+                    </div>
+                    <h3 class="font-bold text-lg">Динара Мажитова</h3>
+                    <p class="text-sm text-brand-red font-semibold mb-2">Юрист</p>
+                    <p class="text-xs text-gray-500">10+ лет с ГАСК и Минобром. Лицензирование.</p>
+                </div>
+                 <div class="group">
+                    <div class="bg-gray-200 rounded-xl overflow-hidden h-64 mb-4 relative">
+                        <img src="https://ui-avatars.com/api/?name=Rauan+S&background=E31E24&color=fff&size=256" alt="Рауан Сулейменов" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition">
+                    </div>
+                    <h3 class="font-bold text-lg">Рауан Сулейменов</h3>
+                    <p class="text-sm text-brand-red font-semibold mb-2">Юрист, LLM</p>
+                    <p class="text-xs text-gray-500">Международные стандарты, договорное право.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact" class="py-20 bg-gradient-to-br from-brand-light to-white">
+        <div class="container mx-auto px-4">
+            <div class="max-w-5xl mx-auto bg-white rounded-3xl shadow-2xl overflow-hidden flex flex-col lg:flex-row">
+                <div class="lg:w-1/2 p-8 md:p-12 bg-brand-dark text-white">
+                    <h2 class="text-3xl font-heading font-bold mb-6">Получите пошаговый план защиты вашей школы</h2>
+                    <p class="mb-8 opacity-90">На бесплатной консультации вы получите:</p>
+                    <ul class="space-y-4 mb-8">
+                        <li class="flex items-start gap-3"><i class="fas fa-check text-brand-red mt-1"></i> Экспресс-аудит рисков за 24 часа</li>
+                        <li class="flex items-start gap-3"><i class="fas fa-check text-brand-red mt-1"></i> Расчет потенциальных штрафов</li>
+                        <li class="flex items-start gap-3"><i class="fas fa-check text-brand-red mt-1"></i> План подготовки к проверкам</li>
+                        <li class="flex items-start gap-3"><i class="fas fa-check text-brand-red mt-1"></i> Ответы на ваши вопросы</li>
+                    </ul>
+                    <div class="bg-white/10 p-4 rounded-lg border border-white/20">
+                        <p class="font-bold text-brand-red mb-1">🎁 БОНУС ТОЛЬКО В ДЕКАБРЕ:</p>
+                        <p class="text-sm">Полный юридический аудит стоимостью 200,000 ₸ — БЕСПЛАТНО при заключении договора.</p>
+                    </div>
+                </div>
+
+                <div class="lg:w-1/2 p-8 md:p-12">
+                    <h3 class="text-2xl font-bold mb-2 text-brand-dark">Заполните форму</h3>
+                    <p class="text-sm text-gray-500 mb-6">Мы свяжемся с вами в течение 15 минут</p>
+
+                    <form onsubmit="event.preventDefault(); window.location.href='thank.html';" class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Ваше имя *</label>
+                            <input type="text" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-red focus:border-brand-red outline-none transition" placeholder="Введите имя">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Телефон *</label>
+                            <input type="tel" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-red focus:border-brand-red outline-none transition" placeholder="+7 (___) ___-__-__">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Тип учреждения</label>
+                            <select class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-red outline-none bg-white">
+                                <option>Частная школа</option>
+                                <option>Детский сад</option>
+                                <option>Образовательный центр</option>
+                                <option>Другое</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="w-full bg-brand-red text-white font-bold text-lg py-4 rounded-lg hover:bg-brand-darkRed transition shadow-lg btn-pulse mt-4">
+                            Получить консультацию бесплатно
+                        </button>
+                        <p class="text-xs text-center text-gray-400 mt-4">Нажимая кнопку, вы соглашаетесь с политикой конфиденциальности. Консультация ни к чему не обязывает.</p>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="bg-brand-dark text-white py-12 border-t border-gray-800 pb-24 md:pb-12">
+        <div class="container mx-auto px-4 grid grid-cols-1 md:grid-cols-3 gap-8 text-sm">
+            <div>
+                <div class="text-2xl font-black font-heading tracking-tighter mb-4">
+                    ADD<span class="text-brand-red">ASTRA</span>
+                </div>
+                <p class="text-gray-400">Юридический партнер для образовательного бизнеса в Казахстане.</p>
+            </div>
+            <div>
+                <h4 class="font-bold text-lg mb-4">Контакты</h4>
+                <ul class="space-y-2 text-gray-300">
+                    <li><i class="fas fa-phone mr-2 text-brand-red"></i> +7 707 142 1215</li>
+                    <li><i class="fas fa-envelope mr-2 text-brand-red"></i> info@addastra.kz</li>
+                    <li><i class="fas fa-map-marker-alt mr-2 text-brand-red"></i> Астана, Алматы</li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="font-bold text-lg mb-4">Режим работы</h4>
+                <p class="text-gray-300">Пн-Пт: 9:00 - 18:00</p>
+                <p class="text-gray-300">Сб: 10:00 - 15:00</p>
+                <div class="flex gap-4 mt-4">
+                    <a href="#" class="text-2xl hover:text-brand-red transition"><i class="fab fa-whatsapp"></i></a>
+                    <a href="#" class="text-2xl hover:text-brand-red transition"><i class="fab fa-telegram"></i></a>
+                    <a href="#" class="text-2xl hover:text-brand-red transition"><i class="fab fa-instagram"></i></a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <div class="mobile-sticky">
+        <a href="#contact" class="block w-full text-center bg-brand-red text-white font-bold py-3 rounded-lg shadow-lg">
+            Бесплатная консультация
+        </a>
+    </div>
+
+    <div id="exitPopup" class="modal fixed inset-0 z-50 flex items-center justify-center p-4">
+        <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" onclick="closePopup()"></div>
+        <div class="relative bg-white rounded-2xl p-8 max-w-md w-full shadow-2xl transform transition-all">
+            <button onclick="closePopup()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600">
+                <i class="fas fa-times text-xl"></i>
+            </button>
+            <div class="text-center">
+                <div class="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4 text-brand-red text-2xl">
+                    <i class="fas fa-file-download"></i>
+                </div>
+                <h3 class="text-2xl font-bold mb-2">Подождите!</h3>
+                <p class="text-gray-600 mb-6">Не уходите с пустыми руками. Скачайте чек-лист "15 документов, которые СЭС проверяет в первую очередь".</p>
+                <button class="w-full bg-brand-teal text-white font-bold py-3 rounded-lg mb-3 hover:bg-opacity-90">
+                    Скачать чек-лист в WhatsApp
+                </button>
+                <button onclick="closePopup()" class="text-gray-400 text-sm hover:text-gray-600">Нет, спасибо, я знаю все риски</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        // Init Animate On Scroll
+        AOS.init({
+            once: true,
+            offset: 100,
+            duration: 800,
+        });
+
+        // Smooth Scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // Number Counter Animation
+        const counters = document.querySelectorAll('.counter');
+        let hasAnimated = false;
+
+        const animateCounters = () => {
+            counters.forEach(counter => {
+                const target = +counter.getAttribute('data-target');
+                const increment = target / 50;
+
+                const updateCount = () => {
+                    const count = +counter.innerText;
+                    if(count < target) {
+                        counter.innerText = Math.ceil(count + increment);
+                        setTimeout(updateCount, 40);
+                    } else {
+                        counter.innerText = target + "+";
+                    }
+                };
+                updateCount();
+            });
+        };
+
+        // Trigger animation when stats section is in view
+        const observer = new IntersectionObserver((entries) => {
+            if(entries[0].isIntersecting && !hasAnimated) {
+                animateCounters();
+                hasAnimated = true;
+            }
+        });
+        observer.observe(document.querySelector('.trust-stats') || document.querySelector('.bg-brand-dark')); // Observing the dark section
+
+        // Exit Intent Logic
+        let popupShown = false;
+
+        // Desktop mouse leave
+        document.addEventListener('mouseleave', e => {
+            if (e.clientY <= 0 && !popupShown && window.innerWidth > 768) {
+                showPopup();
+            }
+        });
+
+        // Mobile timer (simple fallback)
+        setTimeout(() => {
+            if(!popupShown && window.innerWidth < 768) {
+                // showPopup(); // Uncomment if you want aggressive mobile popup
+            }
+        }, 30000);
+
+        function showPopup() {
+            document.getElementById('exitPopup').classList.add('active');
+            popupShown = true;
+        }
+
+        function closePopup() {
+            document.getElementById('exitPopup').classList.remove('active');
+        }
+    </script>
+</body>
+</html>
