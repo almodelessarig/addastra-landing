@@ -768,7 +768,7 @@
 
             try {
                 // Отправляем данные на сервер
-                const response = await fetch('send-telegram.php', {
+                const response = await fetch('/api/send-telegram', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
