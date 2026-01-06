@@ -1,7 +1,7 @@
 <?php
 // Настройки Telegram бота
-define('TELEGRAM_BOT_TOKEN', 'YOUR_BOT_TOKEN_HERE'); // Замените на токен вашего бота
-define('TELEGRAM_CHAT_ID', 'YOUR_CHAT_ID_HERE');     // Замените на ID чата/группы
+define('TELEGRAM_BOT_TOKEN', '8371321529:AAGk8okwfw5CMvg9brXd27g-bSWsAmwh-J4');
+define('TELEGRAM_CHAT_ID', '-5114440637');
 
 // Установка заголовков для CORS (если сайт на другом домене)
 header('Access-Control-Allow-Origin: *');
