@@ -1,15 +1,8 @@
 {
-  "version": 2,
-  "builds": [
+  "rewrites": [
     {
-      "src": "api/send-telegram.js",
-      "use": "@vercel/node"
-    }
-  ],
-  "routes": [
-    {
-      "src": "/send-telegram.php",
-      "dest": "/api/send-telegram.js"
+      "source": "/send-telegram.php",
+      "destination": "/api/send-telegram"
     }
   ]
 }
