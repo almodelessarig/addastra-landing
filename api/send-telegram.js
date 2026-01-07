@@ -160,8 +160,7 @@ export default async function handler(req, res) {
       const leadData = {
         name: `Заявка: ${type}`,
         pipeline_id: AMOCRM_PIPELINE_ID,
-        status_id: AMOCRM_STATUS_ID,
-        custom_fields_values: []
+        status_id: AMOCRM_STATUS_ID
       };
 
       // Добавляем UTM-метки как примечание к сделке
