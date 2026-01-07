@@ -820,6 +820,14 @@
                         });
                     }
 
+                    // Отправляем цель в Яндекс.Метрику
+                    if (typeof ym !== 'undefined') {
+                        ym(106165004, 'reachGoal', 'lead_form_submit', {
+                            name: formData.name,
+                            type: formData.type
+                        });
+                    }
+
                     // Успешная отправка - перенаправляем на страницу благодарности
                     window.location.href = '/thank';
                 } else {
