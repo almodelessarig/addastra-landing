@@ -1,8 +1,12 @@
-// Vercel Serverless Function для отправки заявок в Telegram
+// Vercel Serverless Function для отправки заявок в Telegram и amoCRM
 export default async function handler(req, res) {
   // Настройки Telegram бота
   const TELEGRAM_BOT_TOKEN = '8371321529:AAGk8okwfw5CMvg9brXd27g-bSWsAmwh-J4';
   const TELEGRAM_CHAT_ID = '-5114440637';
+
+  // Настройки amoCRM
+  const AMOCRM_SUBDOMAIN = 'addastra';
+  const AMOCRM_ACCESS_TOKEN = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6ImE2YjE2YWRiNzg3OGE3MWUyNzAwYTJlYzdkNzUwM2NiOGMxMDNmMjA4MWI5OTNiMTA3N2MzODI1OGYwYmFhM2RkM2Y3MTVmMmJhMWJlYmVjIn0.eyJhdWQiOiIyMWUxZDcxMS1jMmZhLTQ0MjQtYTRjNy01MjM0YmEyNDdiZTIiLCJqdGkiOiJhNmIxNmFkYjc4NzhhNzFlMjcwMGEyZWM3ZDc1MDNjYjhjMTAzZjIwODFiOTkzYjEwNzdjMzgyNThmMGJhYTNkZDNmNzE1ZjJiYTFiZWJlYyIsImlhdCI6MTc2Nzc4NDU5MSwibmJmIjoxNzY3Nzg0NTkxLCJleHAiOjE3Njc4NzA5OTEsInN1YiI6IjEyOTEwNTc4IiwiZ3JhbnRfdHlwZSI6IiIsImFjY291bnRfaWQiOjMyNjMwMTk0LCJiYXNlX2RvbWFpbiI6ImFtb2NybS5ydSIsInZlcnNpb24iOjIsInNjb3BlcyI6WyJwdXNoX25vdGlmaWNhdGlvbnMiLCJmaWxlcyIsImNybSIsImZpbGVzX2RlbGV0ZSIsIm5vdGlmaWNhdGlvbnMiXSwiaGFzaF91dWlkIjoiM2Q5NmU2ZmItM2I0OC00NDM1LWE4OGYtMTlmNjQ2OTJhNTVlIiwidXNlcl9mbGFncyI6MCwiYXBpX2RvbWFpbiI6ImFwaS1iLmFtb2NybS5ydSJ9.jjIBOC-TVWXexo926e9gw6zrMZwaQmpGYgAH5UQTfFxERLg40RYhpEoA14D8MPVgYjbafI6F1ZIE9HIaJtNkefHk36sT3e5yjWtb6kluPp97WWPhoDgWHbwrs-gnxj4K1zGKqfE8nkKW1PnSmyHh2oUO7hUO8Sk6cj4JkVwTT0HhpyaE5A3hORRkvJCHzmKJUZkpMnz9vgsi2EewW7HooAhDj-d-oQ811TroNQACh2e5T-VSM5D9t5N6qEjyO6XjGogdio_Qp9HnHTDv7UBpMqCh5QQFt1I1Jmx2On_nHfNpAWZi4NkfYLcp5Yp0kcqOMnVOy17PHxVko0YZU1EBug';
 
   // CORS заголовки
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -83,16 +87,105 @@ export default async function handler(req, res) {
 
     const telegramData = await telegramResponse.json();
 
-    if (telegramData.ok) {
-      res.status(200).json({
-        success: true,
-        message: 'Заявка успешно отправлена!'
-      });
-    } else {
+    if (!telegramData.ok) {
       console.error('Telegram API error:', telegramData);
       res.status(500).json({
         success: false,
-        message: 'Ошибка отправки заявки'
+        message: 'Ошибка отправки заявки в Telegram'
+      });
+      return;
+    }
+
+    // Отправка данных в amoCRM
+    try {
+      // Формирование данных для контакта
+      const contactData = {
+        name: name,
+        custom_fields_values: [
+          {
+            field_code: 'PHONE',
+            values: [
+              {
+                value: phone,
+                enum_code: 'WORK'
+              }
+            ]
+          }
+        ]
+      };
+
+      // Формирование данных для сделки
+      const leadData = {
+        name: `Заявка: ${type}`,
+        custom_fields_values: []
+      };
+
+      // Добавляем UTM-метки как примечание к сделке
+      const utmNote = `UTM Source: ${utm_source}\nUTM Medium: ${utm_medium}\nUTM Campaign: ${utm_campaign}\nUTM Term: ${utm_term}\nUTM Content: ${utm_content}\nСтраница: ${page_url}\nИсточник перехода: ${referrer}`;
+
+      // Создание комплексной сущности (сделка + контакт)
+      const amoData = [
+        {
+          ...leadData,
+          _embedded: {
+            contacts: [contactData]
+          }
+        }
+      ];
+
+      // Отправка в amoCRM
+      const amoUrl = `https://${AMOCRM_SUBDOMAIN}.amocrm.ru/api/v4/leads/complex`;
+
+      const amoResponse = await fetch(amoUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${AMOCRM_ACCESS_TOKEN}`
+        },
+        body: JSON.stringify(amoData)
+      });
+
+      const amoResult = await amoResponse.json();
+
+      if (amoResponse.ok && amoResult[0]?.id) {
+        // Добавляем примечание с UTM-метками к созданной сделке
+        const leadId = amoResult[0].id;
+        const noteUrl = `https://${AMOCRM_SUBDOMAIN}.amocrm.ru/api/v4/leads/${leadId}/notes`;
+
+        await fetch(noteUrl, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${AMOCRM_ACCESS_TOKEN}`
+          },
+          body: JSON.stringify([
+            {
+              note_type: 'common',
+              params: {
+                text: utmNote
+              }
+            }
+          ])
+        });
+
+        res.status(200).json({
+          success: true,
+          message: 'Заявка успешно отправлена в Telegram и amoCRM!'
+        });
+      } else {
+        console.error('amoCRM API error:', amoResult);
+        // Telegram отправлен успешно, но amoCRM не сработал
+        res.status(200).json({
+          success: true,
+          message: 'Заявка отправлена в Telegram, но возникла ошибка при отправке в amoCRM'
+        });
+      }
+    } catch (amoError) {
+      console.error('amoCRM error:', amoError);
+      // Telegram отправлен успешно, но amoCRM не сработал
+      res.status(200).json({
+        success: true,
+        message: 'Заявка отправлена в Telegram, но возникла ошибка при отправке в amoCRM'
       });
     }
   } catch (error) {
