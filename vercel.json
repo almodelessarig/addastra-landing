@@ -3,6 +3,16 @@
     {
       "source": "/send-telegram.php",
       "destination": "/api/send-telegram"
+    },
+    {
+      "source": "/thank",
+      "destination": "/thank.html"
+    },
+    {
+      "source": "/checklist",
+      "destination": "/checklist.html"
     }
-  ]
+  ],
+  "cleanUrls": true,
+  "trailingSlash": false
 }
