@@ -18,6 +18,17 @@ export default async function handler(req, res) {
   const AMOCRM_PIPELINE_ID = 10013954; // "Воронка"
   const AMOCRM_STATUS_ID = 79455042;   // "Неразобранное"
 
+  // ID пользовательского поля "Тип учреждения"
+  const INSTITUTION_TYPE_FIELD_ID = 1262727;
+
+  // Маппинг типов учреждений на ID в amoCRM
+  const INSTITUTION_TYPES = {
+    'Школа': 1440713,
+    'Образовательный центр': 1440715,
+    'Садик': 1440717,
+    'Другое': 1440719
+  };
+
   // Функция обновления amoCRM токена
   async function refreshAmoCRMToken() {
     try {
@@ -156,11 +167,31 @@ export default async function handler(req, res) {
         ]
       };
 
-      // Формирование данных для сделки
+      // Формирование данных для сделки с UTM-метками и типом учреждения
+      const leadCustomFields = [
+        // UTM метки
+        { field_code: 'UTM_SOURCE', values: [{ value: utm_source }] },
+        { field_code: 'UTM_MEDIUM', values: [{ value: utm_medium }] },
+        { field_code: 'UTM_CAMPAIGN', values: [{ value: utm_campaign }] },
+        { field_code: 'UTM_TERM', values: [{ value: utm_term }] },
+        { field_code: 'UTM_CONTENT', values: [{ value: utm_content }] },
+        { field_code: 'REFERRER', values: [{ value: referrer }] }
+      ];
+
+      // Добавляем тип учреждения, если он соответствует одному из известных
+      const institutionTypeId = INSTITUTION_TYPES[type];
+      if (institutionTypeId) {
+        leadCustomFields.push({
+          field_id: INSTITUTION_TYPE_FIELD_ID,
+          values: [{ enum_id: institutionTypeId }]
+        });
+      }
+
       const leadData = {
         name: `Заявка: ${type}`,
         pipeline_id: AMOCRM_PIPELINE_ID,
-        status_id: AMOCRM_STATUS_ID
+        status_id: AMOCRM_STATUS_ID,
+        custom_fields_values: leadCustomFields
       };
 
       // Добавляем UTM-метки как примечание к сделке
