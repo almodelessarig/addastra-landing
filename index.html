@@ -5,8 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ADDASTRA | Юридическая защита образовательных учреждений Казахстана</title>
     <meta name="description" content="Юридический партнер для школ и детских садов. Защита от штрафов и проверок. Абонентское обслуживание.">
-    <meta name="facebook-domain-verification" content="11jzptmd7nn1f9yfammbixprq2coze" />
-
+    <meta name="facebook-domain-verification" content="gil1kwhsd51e5llecwplc9mp59qqtb" />
     <link rel="icon" type="image/svg+xml" href="favicon_addastra.svg">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -113,23 +112,6 @@
 
     </style>
 
-    <!-- Meta Pixel Code -->
-    <script>
-    !function(f,b,e,v,n,t,s)
-    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-    n.queue=[];t=b.createElement(e);t.async=!0;
-    t.src=v;s=b.getElementsByTagName(e)[0];
-    s.parentNode.insertBefore(t,s)}(window, document,'script',
-    'https://connect.facebook.net/en_US/fbevents.js');
-    fbq('init', '1711565420252267');
-    fbq('track', 'PageView');
-    </script>
-    <noscript><img height="1" width="1" style="display:none"
-    src="https://www.facebook.com/tr?id=1711565420252267&ev=PageView&noscript=1"
-    /></noscript>
-    <!-- End Meta Pixel Code -->
 </head>
 <body class="text-brand-dark bg-white">
 
@@ -745,14 +727,6 @@
                 const result = await response.json();
 
                 if (result.success) {
-                    // Отправляем событие в Facebook Pixel
-                    if (typeof fbq !== 'undefined') {
-                        fbq('track', 'Lead', {
-                            content_name: 'Заявка на консультацию',
-                            content_category: formData.type
-                        });
-                    }
-
                     // Отправляем цель в Яндекс.Метрику
                     if (typeof ym !== 'undefined') {
                         ym(106165004, 'reachGoal', 'lead_form_submit', {
