@@ -1,4 +1,6 @@
 // Vercel Serverless Function для отправки заявок в Telegram и amoCRM
+import { createClient } from 'redis';
+
 export default async function handler(req, res) {
   // Настройки Telegram бота
   const TELEGRAM_BOT_TOKEN = '8371321529:AAGk8okwfw5CMvg9brXd27g-bSWsAmwh-J4';
@@ -8,11 +10,7 @@ export default async function handler(req, res) {
   const AMOCRM_SUBDOMAIN = 'addastra';
   const AMOCRM_INTEGRATION_ID = '21e1d711-c2fa-4424-a4c7-5234ba247be2';
   const AMOCRM_SECRET_KEY = 'x3J3eYyILwsk48Le7lerS5T8pu4AwYSuqcqXc1K9D2TIwZ8RGrKSI5DdMaVCDx3R';
-  const AMOCRM_REDIRECT_URI = 'https://addastra-law.kz';
-
-  // Текущие токены (обновляются автоматически)
-  let AMOCRM_ACCESS_TOKEN = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6ImE2YjE2YWRiNzg3OGE3MWUyNzAwYTJlYzdkNzUwM2NiOGMxMDNmMjA4MWI5OTNiMTA3N2MzODI1OGYwYmFhM2RkM2Y3MTVmMmJhMWJlYmVjIn0.eyJhdWQiOiIyMWUxZDcxMS1jMmZhLTQ0MjQtYTRjNy01MjM0YmEyNDdiZTIiLCJqdGkiOiJhNmIxNmFkYjc4NzhhNzFlMjcwMGEyZWM3ZDc1MDNjYjhjMTAzZjIwODFiOTkzYjEwNzdjMzgyNThmMGJhYTNkZDNmNzE1ZjJiYTFiZWJlYyIsImlhdCI6MTc2Nzc4NDU5MSwibmJmIjoxNzY3Nzg0NTkxLCJleHAiOjE3Njc4NzA5OTEsInN1YiI6IjEyOTEwNTc4IiwiZ3JhbnRfdHlwZSI6IiIsImFjY291bnRfaWQiOjMyNjMwMTk0LCJiYXNlX2RvbWFpbiI6ImFtb2NybS5ydSIsInZlcnNpb24iOjIsInNjb3BlcyI6WyJwdXNoX25vdGlmaWNhdGlvbnMiLCJmaWxlcyIsImNybSIsImZpbGVzX2RlbGV0ZSIsIm5vdGlmaWNhdGlvbnMiXSwiaGFzaF91dWlkIjoiM2Q5NmU2ZmItM2I0OC00NDM1LWE4OGYtMTlmNjQ2OTJhNTVlIiwidXNlcl9mbGFncyI6MCwiYXBpX2RvbWFpbiI6ImFwaS1iLmFtb2NybS5ydSJ9.jjIBOC-TVWXexo926e9gw6zrMZwaQmpGYgAH5UQTfFxERLg40RYhpEoA14D8MPVgYjbafI6F1ZIE9HIaJtNkefHk36sT3e5yjWtb6kluPp97WWPhoDgWHbwrs-gnxj4K1zGKqfE8nkKW1PnSmyHh2oUO7hUO8Sk6cj4JkVwTT0HhpyaE5A3hORRkvJCHzmKJUZkpMnz9vgsi2EewW7HooAhDj-d-oQ811TroNQACh2e5T-VSM5D9t5N6qEjyO6XjGogdio_Qp9HnHTDv7UBpMqCh5QQFt1I1Jmx2On_nHfNpAWZi4NkfYLcp5Yp0kcqOMnVOy17PHxVko0YZU1EBug';
-  let AMOCRM_REFRESH_TOKEN = 'def502007fbe857b02ff70d67f90207d67f02d133c5a31bd18d0dbda385b09a872317776735988587dd0965216f00debf7fdb7c20d9ef4d32152c838b0bb4d60a3198daf2b071dccb2ff8b7e75b15ab2a5e679c436431b7282840c95e9651a8674c4034725c89eb7e8f63fb0dc4ee5cf5a2991f3c2f0816e95c5352498e68cd0a45b27a92c883ab3c31be452093fbaefcdd79a3439bbad594fc47c876b6c3b26fe209c076da6d9b7b270cbed1b2f92467bf0d50342c1bfb83549657c9f6cb5b3bd82213388eb6eb65c33ad7328d41375171526f2d2ba1c9d4577641545bd1cde728e59644431012b77e7801e591af311db805ea03222c00d38565c8c6e2b882c3af4f66da9da0482d36d4bb3fbd949a240730880e53ae0893a91dd790ed413a7511c05795aaff1e136f4fbbe41b789aed3585ddcc4fc33923ec313b55b85e0a0ff8e5a5aa3b312eb68aaf5620b719675141602d80cb674c1eb80298bbe8fc50faeb5a4306203c732b7f75d73700cf7da091178be4de1a33defa29b4ce40d65aaa393d903bf804ece36fed3d9f88be3eab1401397d1a20c814fbaf68b1738f11abd71861620c0a3ff5dd975048b8d7d44f9cfd608c6f295d0d9b9506133cd288798fa7e5c560c49773c92b6b2a66c19daff333ddd4f5572e366fee024b26ff6d7cf9e3754434c4464eaae1cba9af0';
+  const AMOCRM_REDIRECT_URI = 'https://addastra-laws.kz';
 
   // Воронка и этап для новых заявок
   const AMOCRM_PIPELINE_ID = 10013954; // "Воронка"
@@ -22,15 +20,54 @@ export default async function handler(req, res) {
   const INSTITUTION_TYPE_FIELD_ID = 1262727;
 
   // Маппинг типов учреждений на ID в amoCRM
+  // Значения должны соответствовать опциям в форме на сайте (index.html)
   const INSTITUTION_TYPES = {
-    'Школа': 1440713,
+    'Частная школа': 1440713,
     'Образовательный центр': 1440715,
-    'Садик': 1440717,
+    'Детский сад': 1440717,
     'Другое': 1440719
   };
 
+  // Redis клиент
+  let redis = null;
+
+  async function getRedisClient() {
+    if (!redis) {
+      redis = createClient({ url: process.env.REDIS_URL });
+      redis.on('error', err => console.error('Redis error:', err));
+      await redis.connect();
+    }
+    return redis;
+  }
+
+  // Получение токенов из Redis
+  async function getTokens() {
+    try {
+      const client = await getRedisClient();
+      const accessToken = await client.get('amocrm_access_token');
+      const refreshToken = await client.get('amocrm_refresh_token');
+      return { accessToken, refreshToken };
+    } catch (error) {
+      console.error('Error getting tokens from Redis:', error);
+      return { accessToken: null, refreshToken: null };
+    }
+  }
+
+  // Сохранение токенов в Redis
+  async function saveTokens(accessToken, refreshToken) {
+    try {
+      const client = await getRedisClient();
+      await client.set('amocrm_access_token', accessToken);
+      await client.set('amocrm_refresh_token', refreshToken);
+      return true;
+    } catch (error) {
+      console.error('Error saving tokens to Redis:', error);
+      return false;
+    }
+  }
+
   // Функция обновления amoCRM токена
-  async function refreshAmoCRMToken() {
+  async function refreshAmoCRMToken(currentRefreshToken) {
     try {
       const tokenUrl = `https://${AMOCRM_SUBDOMAIN}.amocrm.ru/oauth2/access_token`;
 
@@ -41,7 +78,7 @@ export default async function handler(req, res) {
           client_id: AMOCRM_INTEGRATION_ID,
           client_secret: AMOCRM_SECRET_KEY,
           grant_type: 'refresh_token',
-          refresh_token: AMOCRM_REFRESH_TOKEN,
+          refresh_token: currentRefreshToken,
           redirect_uri: AMOCRM_REDIRECT_URI
         })
       });
@@ -49,15 +86,20 @@ export default async function handler(req, res) {
       const data = await response.json();
 
       if (data.access_token) {
-        AMOCRM_ACCESS_TOKEN = data.access_token;
-        AMOCRM_REFRESH_TOKEN = data.refresh_token;
-        return true;
+        // Сохраняем новые токены в Redis
+        await saveTokens(data.access_token, data.refresh_token);
+        return {
+          success: true,
+          accessToken: data.access_token,
+          refreshToken: data.refresh_token
+        };
       }
 
-      return false;
+      console.error('Token refresh failed:', data);
+      return { success: false };
     } catch (error) {
       console.error('Token refresh error:', error);
-      return false;
+      return { success: false };
     }
   }
 
@@ -151,6 +193,18 @@ export default async function handler(req, res) {
 
     // Отправка данных в amoCRM
     try {
+      // Получаем токены из Redis
+      let { accessToken, refreshToken } = await getTokens();
+
+      if (!accessToken || !refreshToken) {
+        console.error('No tokens found in Redis');
+        res.status(200).json({
+          success: true,
+          message: 'Заявка отправлена в Telegram, но токены amoCRM не настроены'
+        });
+        return;
+      }
+
       // Формирование данных для контакта
       const contactData = {
         name: name,
@@ -207,39 +261,35 @@ export default async function handler(req, res) {
         }
       ];
 
-      // Отправка в amoCRM
-      const amoUrl = `https://${AMOCRM_SUBDOMAIN}.amocrm.ru/api/v4/leads/complex`;
+      // Функция отправки в amoCRM
+      async function sendToAmoCRM(token) {
+        const amoUrl = `https://${AMOCRM_SUBDOMAIN}.amocrm.ru/api/v4/leads/complex`;
+        return await fetch(amoUrl, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          },
+          body: JSON.stringify(amoData)
+        });
+      }
 
-      const amoResponse = await fetch(amoUrl, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${AMOCRM_ACCESS_TOKEN}`
-        },
-        body: JSON.stringify(amoData)
-      });
-
+      // Первая попытка отправки
+      let amoResponse = await sendToAmoCRM(accessToken);
       let amoResult = await amoResponse.json();
 
       // Если токен истёк (401), обновляем его и пробуем снова
       if (amoResponse.status === 401) {
         console.log('amoCRM token expired, refreshing...');
-        const refreshed = await refreshAmoCRMToken();
+        const refreshResult = await refreshAmoCRMToken(refreshToken);
 
-        if (refreshed) {
+        if (refreshResult.success) {
           // Повторная попытка с новым токеном
-          const retryResponse = await fetch(amoUrl, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              'Authorization': `Bearer ${AMOCRM_ACCESS_TOKEN}`
-            },
-            body: JSON.stringify(amoData)
-          });
+          accessToken = refreshResult.accessToken;
+          amoResponse = await sendToAmoCRM(accessToken);
+          amoResult = await amoResponse.json();
 
-          amoResult = await retryResponse.json();
-
-          if (!retryResponse.ok) {
+          if (!amoResponse.ok) {
             console.error('amoCRM API error after token refresh:', amoResult);
             res.status(200).json({
               success: true,
@@ -266,7 +316,7 @@ export default async function handler(req, res) {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${AMOCRM_ACCESS_TOKEN}`
+            'Authorization': `Bearer ${accessToken}`
           },
           body: JSON.stringify([
             {
@@ -304,5 +354,10 @@ export default async function handler(req, res) {
       success: false,
       message: 'Ошибка сервера'
     });
+  } finally {
+    // Закрываем Redis соединение
+    if (redis) {
+      await redis.quit().catch(() => {});
+    }
   }
 }
