@@ -4,7 +4,7 @@ import { createClient } from 'redis';
 export default async function handler(req, res) {
   // Настройки Telegram бота
   const TELEGRAM_BOT_TOKEN = '8371321529:AAGk8okwfw5CMvg9brXd27g-bSWsAmwh-J4';
-  const TELEGRAM_CHAT_ID = '-5114440637';
+  const TELEGRAM_CHAT_ID = '-1003758744538';
 
   // Настройки amoCRM
   const AMOCRM_SUBDOMAIN = 'addastra';
