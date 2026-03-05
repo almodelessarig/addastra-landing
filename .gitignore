@@ -17,3 +17,10 @@
 logs
 *.log
 npm-debug.log*
+.env*.local
+.env.vercel
+amocrm-tokens.txt
+node_modules/
+
+# Python utility scripts
+*.py
